@@ -16,6 +16,12 @@
     "username": "customer2",
     "password": "password123",
     "roles": ["customer"]
+  },
+  {
+    "id": 4,
+    "username": "admin",
+    "password": "password123",
+    "roles": ["admin"]
   }
 
 ]

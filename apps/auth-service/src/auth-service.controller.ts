@@ -9,10 +9,14 @@ export class AuthServiceController {
 
   @Post('login')
   login(@Body() body: { username: string; password: string }) {
-    const data = this.authService.validateUser(body.username, body.password);
-    return {
-      message: 'Login successful',
-      data: data,
-    };
+    this.logger.log(`Login attempt for user: ${body.username}`);
+    try {
+      const data = this.authService.validateUser(body.username, body.password);
+      this.logger.log(`Login attempt for user: ${body.username}`);
+      return data;
+    } catch (error) {
+      this.logger.error(`Login failed for user: ${body.username}`, error);
+      throw error;
+    }
   }
 }

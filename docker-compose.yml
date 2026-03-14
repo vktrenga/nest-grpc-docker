@@ -11,20 +11,20 @@ services:
       - JWT_SECRET=revest
     depends_on:
       - mongodb
-      - redis
       - postgres
 
   order-service:
     build: .
     working_dir: /app/apps/order-service
-    command: npm run start:order-service
+    command: npm run start:dev:order-service
     ports:
       - '3002:3002'
     environment:
       - NODE_ENV=dev
+      - JWT_SECRET=revest
+      - PRODUCT_SERVICE_API_KEY=my-product-secret-key
     depends_on:
       - mongodb
-      - redis
       - postgres
 
   product-service:
@@ -37,9 +37,9 @@ services:
       - NODE_ENV=dev
       - MONGO_URI=mongodb://admin:admin@mongodb:27017/product_db?authSource=admin
       - JWT_SECRET=revest
+      - PRODUCT_SERVICE_API_KEY=my-product-secret-key
     depends_on:
       - mongodb
-      - redis
       - postgres
 
   mongodb:
@@ -53,13 +53,8 @@ services:
     volumes:
       - mongo-data:/data/db
 
-  redis:
-    image: redis:7
-    ports:
-      - '6379:6379'
-    
-    volumes:
-      - redis-data:/data
+
+  
 
   postgres:
     image: postgres:16
@@ -74,5 +69,7 @@ services:
 
 volumes:
   mongo-data:
-  redis-data:
   postgres-data:
+
+# I had plan for implementing caching for product details in the order service using Redis, 
+# but I decided to keep it simple for now and removed it from the current implementation.

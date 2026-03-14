@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Start all services
-CMD ["npm", "run", "run:all"]
+CMD ["npm", "run", "run:all:dev"]

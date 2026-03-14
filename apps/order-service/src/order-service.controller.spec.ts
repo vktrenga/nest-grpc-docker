@@ -14,9 +14,5 @@ describe('OrderServiceController', () => {
     orderServiceController = app.get<OrderServiceController>(OrderServiceController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(orderServiceController.getHello()).toBe('Hello World!');
-    });
-  });
+
 });

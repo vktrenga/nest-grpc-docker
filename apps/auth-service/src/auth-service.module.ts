@@ -9,7 +9,6 @@ import { createLoggingMiddleware } from '@app/common/middleware/logging.middlewa
 import { AppLogger } from '@app/common/logger/logger.service';
 import { AuthService } from './auth-service.service';
 
-// ...existing code...
 
 @Module({
   imports: [

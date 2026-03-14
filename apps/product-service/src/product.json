@@ -1,0 +1,248 @@
+[
+  {
+    "name": "Air Max 270",
+    "description": "Comfortable running shoes",
+    "brand": "NIKE",
+    "category": "SHOES",
+    "variants": [
+      { "sku": "NIKE-270-BLK-9", "price": 120, "stock": 50, "attributes": { "color": "Black", "size": 9 } },
+      { "sku": "NIKE-270-WHT-10", "price": 125, "stock": 30, "attributes": { "color": "White", "size": 10 } }
+    ]
+  },
+  {
+    "name": "Air Zoom Pegasus",
+    "description": "High performance running shoes",
+    "brand": "NIKE",
+    "category": "SHOES",
+    "variants": [
+      { "sku": "NIKE-PG-RED-8", "price": 110, "stock": 40, "attributes": { "color": "Red", "size": 8 } }
+    ]
+  },
+  {
+    "name": "iPhone 14",
+    "description": "Latest Apple smartphone",
+    "brand": "APPLE",
+    "category": "MOBILE",
+    "variants": [
+      { "sku": "IPHONE14-128-BLK", "price": 999, "stock": 20, "attributes": { "storage": "128GB", "color": "Black" } },
+      { "sku": "IPHONE14-256-WHT", "price": 1099, "stock": 15, "attributes": { "storage": "256GB", "color": "White" } }
+    ]
+  },
+  {
+    "name": "iPhone 14 Pro",
+    "description": "Advanced smartphone with Pro features",
+    "brand": "APPLE",
+    "category": "MOBILE",
+    "variants": [
+      { "sku": "IPHONE14PRO-128-SLV", "price": 1199, "stock": 10, "attributes": { "storage": "128GB", "color": "Silver" } }
+    ]
+  },
+  {
+    "name": "Galaxy S23",
+    "description": "Samsung flagship smartphone",
+    "brand": "SAMSUNG",
+    "category": "MOBILE",
+    "variants": [
+      { "sku": "GS23-128-BLK", "price": 950, "stock": 25, "attributes": { "storage": "128GB", "color": "Black" } },
+      { "sku": "GS23-256-WHT", "price": 1050, "stock": 10, "attributes": { "storage": "256GB", "color": "White" } }
+    ]
+  },
+  {
+    "name": "Galaxy Watch 6",
+    "description": "Smartwatch with fitness tracking",
+    "brand": "SAMSUNG",
+    "category": "ACCESSORIES",
+    "variants": [
+      { "sku": "GW6-BLK-40MM", "price": 299, "stock": 50, "attributes": { "color": "Black", "size": "40mm" } }
+    ]
+  },
+  {
+    "name": "Nike Air Force 1",
+    "description": "Classic lifestyle sneakers",
+    "brand": "NIKE",
+    "category": "SHOES",
+    "variants": [
+      { "sku": "NIKE-AF1-WHT-10", "price": 100, "stock": 60, "attributes": { "color": "White", "size": 10 } }
+    ]
+  },
+  {
+    "name": "Apple Watch Series 9",
+    "description": "Latest Apple smartwatch",
+    "brand": "APPLE",
+    "category": "ACCESSORIES",
+    "variants": [
+      { "sku": "AWS9-44-BLK", "price": 399, "stock": 30, "attributes": { "color": "Black", "size": "44mm" } }
+    ]
+  },
+  {
+    "name": "Galaxy Buds 2",
+    "description": "Wireless earbuds with noise cancellation",
+    "brand": "SAMSUNG",
+    "category": "ACCESSORIES",
+    "variants": [
+      { "sku": "GB2-BLK", "price": 149, "stock": 100, "attributes": { "color": "Black" } }
+    ]
+  },
+  {
+    "name": "Nike Revolution 6",
+    "description": "Lightweight running shoes",
+    "brand": "NIKE",
+    "category": "SHOES",
+    "variants": [
+      { "sku": "NIKE-R6-BLU-9", "price": 90, "stock": 45, "attributes": { "color": "Blue", "size": 9 } }
+    ]
+  },
+  {
+    "name": "iPad Air",
+    "description": "Apple tablet with M1 chip",
+    "brand": "APPLE",
+    "category": "ACCESSORIES",
+    "variants": [
+      { "sku": "IPAD-AIR-64-SLV", "price": 599, "stock": 20, "attributes": { "storage": "64GB", "color": "Silver" } }
+    ]
+  },
+  {
+    "name": "Galaxy Tab S8",
+    "description": "Samsung tablet for productivity",
+    "brand": "SAMSUNG",
+    "category": "ACCESSORIES",
+    "variants": [
+      { "sku": "GTS8-128-BLK", "price": 649, "stock": 15, "attributes": { "storage": "128GB", "color": "Black" } }
+    ]
+  },
+  {
+    "name": "Nike SB Dunk",
+    "description": "Skateboarding shoes",
+    "brand": "NIKE",
+    "category": "SHOES",
+    "variants": [
+      { "sku": "NIKE-SB-WHT-11", "price": 110, "stock": 35, "attributes": { "color": "White", "size": 11 } }
+    ]
+  },
+  {
+    "name": "iPhone SE",
+    "description": "Affordable Apple smartphone",
+    "brand": "APPLE",
+    "category": "MOBILE",
+    "variants": [
+      { "sku": "IPHONESE-64-BLK", "price": 499, "stock": 40, "attributes": { "storage": "64GB", "color": "Black" } }
+    ]
+  },
+  {
+    "name": "Galaxy A53",
+    "description": "Mid-range Samsung smartphone",
+    "brand": "SAMSUNG",
+    "category": "MOBILE",
+    "variants": [
+      { "sku": "GA53-128-BLU", "price": 350, "stock": 60, "attributes": { "storage": "128GB", "color": "Blue" } }
+    ]
+  },
+  {
+    "name": "Nike ZoomX",
+    "description": "Performance running shoes",
+    "brand": "NIKE",
+    "category": "SHOES",
+    "variants": [
+      { "sku": "NIKE-ZX-RED-10", "price": 150, "stock": 25, "attributes": { "color": "Red", "size": 10 } }
+    ]
+  },
+  {
+    "name": "Apple AirPods Pro",
+    "description": "Noise-cancelling earbuds",
+    "brand": "APPLE",
+    "category": "ACCESSORIES",
+    "variants": [
+      { "sku": "APP-AIRPRO-WHT", "price": 249, "stock": 80, "attributes": { "color": "White" } }
+    ]
+  },
+  {
+    "name": "Galaxy Flip 5",
+    "description": "Foldable Samsung smartphone",
+    "brand": "SAMSUNG",
+    "category": "MOBILE",
+    "variants": [
+      { "sku": "GF5-256-BLK", "price": 1100, "stock": 10, "attributes": { "storage": "256GB", "color": "Black" } }
+    ]
+  },
+  {
+    "name": "Nike Metcon 8",
+    "description": "Training and crossfit shoes",
+    "brand": "NIKE",
+    "category": "SHOES",
+    "variants": [
+      { "sku": "NIKE-M8-GRY-9", "price": 130, "stock": 30, "attributes": { "color": "Gray", "size": 9 } }
+    ]
+  },
+  {
+    "name": "iPad Mini",
+    "description": "Compact Apple tablet",
+    "brand": "APPLE",
+    "category": "ACCESSORIES",
+    "variants": [
+      { "sku": "IPADMINI-64-GRN", "price": 499, "stock": 25, "attributes": { "storage": "64GB", "color": "Green" } }
+    ]
+  },
+  {
+    "name": "Galaxy Watch 5",
+    "description": "Samsung smartwatch with health tracking",
+    "brand": "SAMSUNG",
+    "category": "ACCESSORIES",
+    "variants": [
+      { "sku": "GW5-44-SLV", "price": 279, "stock": 40, "attributes": { "color": "Silver", "size": "44mm" } }
+    ]
+  },
+  {
+    "name": "Nike Free RN",
+    "description": "Flexible running shoes",
+    "brand": "NIKE",
+    "category": "SHOES",
+    "variants": [
+      { "sku": "NIKE-FRN-BLK-8", "price": 95, "stock": 50, "attributes": { "color": "Black", "size": 8 } }
+    ]
+  },
+  {
+    "name": "Apple MacBook Air",
+    "description": "Lightweight laptop with M2 chip",
+    "brand": "APPLE",
+    "category": "ACCESSORIES",
+    "variants": [
+      { "sku": "MBA-M2-256-SLV", "price": 999, "stock": 15, "attributes": { "storage": "256GB", "color": "Silver" } }
+    ]
+  },
+  {
+    "name": "Galaxy Tab A8",
+    "description": "Budget-friendly Samsung tablet",
+    "brand": "SAMSUNG",
+    "category": "ACCESSORIES",
+    "variants": [
+      { "sku": "GTA8-64-BLU", "price": 229, "stock": 30, "attributes": { "storage": "64GB", "color": "Blue" } }
+    ]
+  },
+  {
+    "name": "Nike Air Zoom Alphafly",
+    "description": "Elite marathon shoes",
+    "brand": "NIKE",
+    "category": "SHOES",
+    "variants": [
+      { "sku": "NIKE-AZA-GRY-10", "price": 200, "stock": 10, "attributes": { "color": "Gray", "size": 10 } }
+    ]
+  },
+  {
+    "name": "Apple Watch Ultra",
+    "description": "High-end Apple smartwatch",
+    "brand": "APPLE",
+    "category": "ACCESSORIES",
+    "variants": [
+      { "sku": "AW-U-49-OR", "price": 799, "stock": 5, "attributes": { "color": "Orange", "size": "49mm" } }
+    ]
+  },
+  {
+    "name": "Galaxy Buds Live",
+    "description": "Samsung wireless earbuds",
+    "brand": "SAMSUNG",
+    "category": "ACCESSORIES",
+    "variants": [
+      { "sku": "GBL-BLK", "price": 169, "stock": 70, "attributes": { "color": "Black" } }
+    ]
+  }
+]

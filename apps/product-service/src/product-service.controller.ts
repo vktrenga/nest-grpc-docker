@@ -8,6 +8,7 @@ import { AuthGuard } from '@app/common/guards/auth.guard';
 import { ProductService } from './product-service.service';
 import { Patch } from '@nestjs/common';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { AppLogger } from '@app/common/logger/logger.service';
 
 @Controller('products')
 @UsePipes(new ValidationPipe({
@@ -24,7 +25,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
   },
 }))
 export class ProductServiceController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService, private readonly logger: AppLogger) {}
 
  
 
@@ -33,7 +34,22 @@ export class ProductServiceController {
   @Roles('admin', 'employee', 'customer')
   @UseInterceptors(ClassSerializerInterceptor)
   getProducts(@Request() req: any) {
-    return this.productService.findAll();
+    const currnetPage = req.query.page || 1;
+    const pageSize = req.query.limit || 10; 
+    const filters: any = { deleted: false };
+
+  if (req.query.q) {
+    filters.name = { $regex: req.query.q, $options: 'i' }; // case-insensitive search
+  }
+
+  if (req.query.category) {
+    filters.category = req.query.category;
+  }
+
+  if (req.query.brand) {
+    filters.brand = req.query.brand;
+  }
+    return this.productService.findAll({ page: currnetPage, limit: pageSize, ...filters });
   }
 
   @Post()
@@ -69,5 +85,11 @@ export class ProductServiceController {
   @Roles('admin', 'employee')
   async delete(@Param('id') id: string, @Request() req: any) {
     return this.productService.delete(id);
+  }
+  @Post('seed')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('admin')
+  async seedProducts(): Promise<any[]> {
+    return this.productService.insertProductsFromJSON();
   }
 }

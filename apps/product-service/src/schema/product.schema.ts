@@ -30,6 +30,9 @@ export class Variant {
 
   @Prop({ type: Object })
   attributes: Record<string, any>;
+
+  @Prop({ default: false })
+  deleted: boolean;
 }
 
 const VariantSchema = SchemaFactory.createForClass(Variant);

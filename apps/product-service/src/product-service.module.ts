@@ -3,13 +3,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { ProductServiceController } from './product-service.controller';
 import { ProductService } from './product-service.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from '@app/common/filters/http-exception.filter';
 import { AppLogger } from '@app/common/logger/logger.service';
 import { createLoggingMiddleware } from '@app/common/middleware/logging.middleware';
 import { ProductSchema } from './schema/product.schema';
 import { CommonModule } from '@app/common/common.module';
 import { ProductGrpcController } from './product.grpc.controller';
+import { TransformInterceptor } from '@app/common/interceptors/transform.interceptor';
 
 @Module({
   imports: [
@@ -25,8 +26,8 @@ import { ProductGrpcController } from './product.grpc.controller';
   providers: [
     ProductService,
     {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
+         provide: APP_INTERCEPTOR,
+         useClass: TransformInterceptor,
     },
     {
       provide: APP_FILTER,
