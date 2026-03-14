@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package product;
+
+service ProductService {
+  rpc GetProductsBySkus (ProductSkusRequest) returns (ProductsResponse);
+}
+
+message ProductSkusRequest {
+  repeated string skus = 1;
+}
+
+message ProductVariant {
+  string sku = 1;
+  string productId = 2;
+  string name = 3;
+  string category = 4;
+  double price = 5;
+}
+
+message ProductsResponse {
+  repeated ProductVariant items = 1;
+}
