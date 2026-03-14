@@ -23,9 +23,14 @@ services:
       - NODE_ENV=dev
       - JWT_SECRET=revest
       - PRODUCT_SERVICE_API_KEY=my-product-secret-key
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     depends_on:
       - mongodb
       - postgres
+      - redis
+
+    
 
   product-service:
     build: .
@@ -54,7 +59,12 @@ services:
       - mongo-data:/data/db
 
 
-  
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    ports:
+      - '6379:6379'
+    restart: always
 
   postgres:
     image: postgres:16

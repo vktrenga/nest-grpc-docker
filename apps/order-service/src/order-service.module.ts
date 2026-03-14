@@ -14,6 +14,7 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt/dist/jwt.module';
 import { createLoggingMiddleware } from '@app/common/middleware/logging.middleware';
 import { TransformInterceptor } from '@app/common/interceptors/transform.interceptor';
+import Redis from 'ioredis/built/Redis';
 
 @Module({
   imports: [
@@ -46,8 +47,8 @@ import { TransformInterceptor } from '@app/common/interceptors/transform.interce
       entities: [Order, OrderItem],
       synchronize: true,
     }),
-
     TypeOrmModule.forFeature([Order, OrderItem]),
+    
   ],
   controllers: [OrderServiceController],
   providers: [
@@ -63,6 +64,15 @@ import { TransformInterceptor } from '@app/common/interceptors/transform.interce
     {
       provide: AppLogger,
       useFactory: () => new AppLogger('order-service'),
+    },
+    {
+      provide: 'REDIS_CLIENT',
+      useFactory: () => {
+        return new Redis({
+          host: process.env.REDIS_HOST || 'localhost',
+          port: Number(process.env.REDIS_PORT) || 6379,
+        });
+      },
     },
   ],
 })

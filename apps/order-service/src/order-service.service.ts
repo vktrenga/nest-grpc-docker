@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from './entity/order.entity';
 import { OrderItem } from './entity/order-item.entity';
-
+import Redis from 'ioredis';
 import { GetOrdersDto } from './order.interface';
 import { AppLogger } from '@app/common/logger/logger.service';
 
@@ -25,6 +25,7 @@ export class OrderServiceService implements OnModuleInit {
     @InjectRepository(OrderItem)
     private orderItemRepo: Repository<OrderItem>,
     private readonly logger: AppLogger,
+    @Inject('REDIS_CLIENT') private readonly redisClient: Redis,
   ) {}
 
   onModuleInit() {
@@ -32,16 +33,58 @@ export class OrderServiceService implements OnModuleInit {
       this.client.getService<ProductService>('ProductService');
   }
 
-  async getProductsByGrpc(productIds: string[]) {
-    try {
-   
-    const response = await firstValueFrom(
-      this.productService.GetProductsBySkus({ skus: productIds }),
-    );
+  async getProductFromCache(sku: string) {
+    const cached = await this.redisClient.get(`product:${sku}`);
+    return cached ? JSON.parse(cached) : null;
+  }
 
-    return response;
+  async setProductCache(sku: string, product: any) {
+    this.logger.log(`Setting cache for SKU: ${sku} - ${JSON.stringify(product)}`);
+    await this.redisClient.setex(
+      `product:${sku}`,
+      600,
+      JSON.stringify(product),
+    );
+  }
+
+  async getProductsByGrpc(skus: string[], isCheckCache = true) {
+    try {
+      let missingSkus: string[] = [];
+      const cachedProducts: any = {};
+      if (isCheckCache === true) {
+        for (const sku of skus) {
+          const cachedValue = await this.getProductFromCache(sku);
+          if (cachedValue) {
+            this.logger.log(`Cache hit for SKU: ${sku}`+JSON.stringify(cachedValue));
+            cachedProducts[sku] = cachedValue;
+          } else {
+            this.logger.log(`Cache miss for SKU: ${sku}`);
+            missingSkus.push(sku);
+          }
+        }
+      } else {
+        missingSkus = skus;
+      }
+      let response: any = {items: []};
+      if(missingSkus.length > 0) {
+       response = await firstValueFrom(
+        this.productService.GetProductsBySkus({ skus: missingSkus }),
+      );
+      if (response) {
+        for (const product of response?.items) {
+          await this.setProductCache(product.sku, product);
+        }
+      }
+    }
+     if (Object.keys(cachedProducts).length > 0) {
+        response?.items.push(...Object.values(cachedProducts));
+      } 
+      return response;
     } catch (error) {
-      this.logger.error('Error fetching product details from gRPC service', error);
+      this.logger.error(
+        'Error fetching product details from gRPC service',
+        error,
+      );
       throw new Error('Failed to fetch product details');
     }
   }
@@ -64,7 +107,7 @@ export class OrderServiceService implements OnModuleInit {
     if (!order) throw new Error('Order not found');
 
     //  Fetch product details
-    const products: any = await this.getProductsByGrpc([itemData.sku]);
+    const products: any = await this.getProductsByGrpc([itemData.sku], true);
     if (!products.items.length) {
       throw new Error(`Product with SKU ${itemData.sku} not found`);
     }
@@ -113,7 +156,7 @@ export class OrderServiceService implements OnModuleInit {
     await this.orderRepo.save(order);
 
     //  Map product details for response
-    const productDetails = await this.mapProducts([itemData]);
+    const productDetails = await this.mapProducts([itemData], true);
     return {
       items: productDetails[0],
       message: 'Item added to order successfully',
@@ -127,7 +170,7 @@ export class OrderServiceService implements OnModuleInit {
     });
     if (!order) throw new Error('Order not found');
     const itemsSkus = order.items.map((i: any) => i.sku);
-    const products: any = await this.getProductsByGrpc(itemsSkus);
+    const products: any = await this.getProductsByGrpc(itemsSkus, false);
     for (const item of order.items) {
       const product = products.items.find((p) => p.sku === item.sku);
       if (product.stock < item.quantity) {
@@ -204,14 +247,14 @@ export class OrderServiceService implements OnModuleInit {
       throw new Error('Order not found');
     }
     order.items =
-      order.items.length > 0 ? await this.mapProducts(order.items) : [];
+      order.items.length > 0 ? await this.mapProducts(order.items, true) : [];
     return order;
   }
 
-  async mapProducts(cartItems: any[]) {
+  async mapProducts(cartItems: any[], isCache = true) {
     const itemsSkus = cartItems.map((i: any) => i.sku);
 
-    const products: any = await this.getProductsByGrpc(itemsSkus);
+    const products: any = await this.getProductsByGrpc(itemsSkus, isCache);
 
     return cartItems.map((item) => {
       const product = products?.items.find(
