@@ -37,6 +37,17 @@ export class OrderServiceController {
     const orderId = req.params.orderId;
     return await this.orderServiceService.completeOrder(orderId);
   }
+  
+  @Get('me')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('customer')
+  async getMyOrders(@Request() req: any) {
+    const userId = req?.user?.sub;
+    if (!userId) {
+      throw new Error('User ID not found in request');
+    }
+    return await this.orderServiceService.getCustomerOrders(userId, req.query,'customer');
+  }
 
   @Get(':orderId')
   @UseGuards(AuthGuard, RolesGuard)
@@ -51,24 +62,11 @@ export class OrderServiceController {
 
   @Get()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles('customer', 'employee', 'admin')
+  @Roles('employee', 'admin')
   async getCustomerOrders(@Request() req: any) {
-    const userId = req?.user?.sub;
-    if (!userId) {
-      throw new Error('User ID not found in request');
-    }
-    return await this.orderServiceService.getCustomerOrders(userId, req.query,'admin');
+    return await this.orderServiceService.getCustomerOrders(null, req.query,'admin');
   }
 
   
-  @Get('/me')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles('customer')
-  async getMyOrders(@Request() req: any) {
-    const userId = req?.user?.sub;
-    if (!userId) {
-      throw new Error('User ID not found in request');
-    }
-    return await this.orderServiceService.getCustomerOrders(userId, req.query,'customer');
-  }
+ 
 }

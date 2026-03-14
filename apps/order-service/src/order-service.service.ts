@@ -193,7 +193,7 @@ export class OrderServiceService implements OnModuleInit {
   }
 
   async getCustomerOrders(
-    userId: string,
+    userId: string | null,
     query: GetOrdersDto,
     mode = 'customer',
   ) {
@@ -204,9 +204,14 @@ export class OrderServiceService implements OnModuleInit {
     // Build dynamic filters
     let filters: any = {};
     if (mode === 'customer') {
-      filters = { userId };
+      filters = { userId:  userId };
     }
-
+     if (mode !== 'customer' && query?.userId) {
+      filters = { userId: query?.userId };
+    }
+     if (query.status) {
+      filters.status = query.status;
+    }
     if (query.status) {
       filters.status = query.status;
     }
