@@ -3,7 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ProductServiceController } from './product-service.controller';
 import { ProductService } from './product-service.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from '@app/common/filters/http-exception.filter';
 import { AppLogger } from '@app/common/logger/logger.service';
 import { createLoggingMiddleware } from '@app/common/middleware/logging.middleware';
@@ -11,6 +11,8 @@ import { ProductSchema } from './schema/product.schema';
 import { CommonModule } from '@app/common/common.module';
 import { ProductGrpcController } from './product.grpc.controller';
 import { TransformInterceptor } from '@app/common/interceptors/transform.interceptor';
+import { ThrottlerGuard } from '@nestjs/throttler/dist/throttler.guard';
+import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
 
 @Module({
   imports: [
@@ -21,6 +23,11 @@ import { TransformInterceptor } from '@app/common/interceptors/transform.interce
     }),
     MongooseModule.forRoot(process.env.MONGO_URI!), 
     MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }]),
+    ThrottlerModule.forRoot([
+              {
+                ttl: 60000,   // 60 seconds
+                limit: 20,    // max 20 requests
+              }])
   ],
   controllers: [ProductServiceController,ProductGrpcController],
   providers: [
@@ -37,6 +44,10 @@ import { TransformInterceptor } from '@app/common/interceptors/transform.interce
       provide: AppLogger,
       useFactory: () => new AppLogger('product-service'), 
     },
+     {
+              provide: APP_GUARD,
+              useClass: ThrottlerGuard,
+   },
   ],
 })
 export class ProductServiceModule {

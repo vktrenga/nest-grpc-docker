@@ -38,17 +38,17 @@ export class ProductServiceController {
     const pageSize = req.query.limit || 10; 
     const filters: any = { deleted: false };
 
-  if (req.query.q) {
-    filters.name = { $regex: req.query.q, $options: 'i' }; // case-insensitive search
-  }
+    if (req.query.q) {
+      filters.name = { $regex: req.query.q, $options: 'i' }; // case-insensitive search
+    }
 
-  if (req.query.category) {
-    filters.category = req.query.category;
-  }
+    if (req.query.category) {
+      filters.category = req.query.category;
+    }
 
-  if (req.query.brand) {
-    filters.brand = req.query.brand;
-  }
+    if (req.query.brand) {
+      filters.brand = req.query.brand;
+    }
     return this.productService.findAll({ page: currnetPage, limit: pageSize, ...filters });
   }
 

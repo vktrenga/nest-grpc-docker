@@ -8,6 +8,8 @@ A microservices-based ecommerce backend built with NestJS, supporting authentica
 - User login with JWT authentication
 - User roles support (customer, employee, admin)
 - Simple user data from JSON (for demo/testing)
+- **Rate limiting (Throttle):** Login endpoint is protected with rate limiting (3 requests per 60 seconds per IP) to prevent brute-force attacks.
+- **Security:** Access tokens are set as httpOnly, secure, sameSite=strict cookies (not exposed to JavaScript), enhancing session security.
 
 ### Product Service
 - CRUD operations for products (create, update, delete, get)
@@ -16,6 +18,7 @@ A microservices-based ecommerce backend built with NestJS, supporting authentica
 - Seed products from JSON
 - Role-based access (admin/employee/customer)
 - Soft delete for product variants & product
+- **Rate limiting (Throttle):** Product listing endpoint is protected with rate limiting (20 requests per 60 seconds per IP) to prevent abuse.
 
 ### Order Service
 - Create orders for authenticated users
@@ -25,6 +28,7 @@ A microservices-based ecommerce backend built with NestJS, supporting authentica
 - Pagination and filtering for order queries
 - Caching of product data with Redis
 - Integration with Product Service via gRPC
+- **Rate limiting (Throttle):** Product listing endpoint is protected with rate limiting (20 requests per 60 seconds per IP) to prevent abuse.
 
 ### Common Library
 - Shared decorators, guards, interceptors, and logger

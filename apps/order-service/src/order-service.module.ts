@@ -10,11 +10,13 @@ import { OrderItem } from './entity/order-item.entity';
 import { CommonModule } from '@app/common/common.module';
 import { AppLogger } from '@app/common/logger/logger.service';
 import { HttpExceptionFilter } from '@app/common/filters/http-exception.filter';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt/dist/jwt.module';
 import { createLoggingMiddleware } from '@app/common/middleware/logging.middleware';
 import { TransformInterceptor } from '@app/common/interceptors/transform.interceptor';
 import Redis from 'ioredis/built/Redis';
+import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
+import { ThrottlerGuard } from '@nestjs/throttler/dist/throttler.guard';
 
 @Module({
   imports: [
@@ -48,7 +50,11 @@ import Redis from 'ioredis/built/Redis';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([Order, OrderItem]),
-    
+    ThrottlerModule.forRoot([
+          {
+            ttl: 60000,   // 60 seconds
+            limit: 20,    // max 20 requests
+          }])
   ],
   controllers: [OrderServiceController],
   providers: [
@@ -73,6 +79,10 @@ import Redis from 'ioredis/built/Redis';
           port: Number(process.env.REDIS_PORT) || 6379,
         });
       },
+    },
+    {
+          provide: APP_GUARD,
+          useClass: ThrottlerGuard,
     },
   ],
 })
