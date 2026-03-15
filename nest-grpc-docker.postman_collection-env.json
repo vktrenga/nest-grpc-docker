@@ -1,0 +1,40 @@
+{
+	"id": "42febdc5-35f6-4e87-af69-8ed6926f8e8d",
+	"name": "nest-grpc-docker",
+	"values": [
+		{
+			"key": "adminToken",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlcyI6WyJhZG1pbiJdLCJpYXQiOjE3NzM0NzQ0MzgsImV4cCI6MTc3MzQ3ODAzOH0._eE8FH6DwnyDoaMW8f1BYvF7bBOvg96sshcYBhbkdG4",
+			"type": "secret",
+			"enabled": true
+		},
+		{
+			"key": "employeeToken",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "customerToken",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "CustomerToken",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "orderId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"color": null,
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2026-03-14T23:56:52.917Z",
+	"_postman_exported_using": "Postman/11.88.3"
+}

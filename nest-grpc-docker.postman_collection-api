@@ -1,0 +1,770 @@
+{
+  "info": {
+    "_postman_id": "b98c0439-4cd7-4ea7-8390-dee3706b8685",
+    "name": "nest-grpc-docker",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "34261290"
+  },
+  "item": [
+    {
+      "name": "Admin Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Login succeeded\", () => {\r",
+              "  pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "const json = pm.response.json();\r",
+              "\r",
+              "// expects: { status, data: { message, data: { access_token, user } }, timestamp }\r",
+              "const token = json?.data?.data?.access_token;\r",
+              "\r",
+              "\r",
+              "\r",
+              "// Set environment variable for subsequent requests\r",
+              "if (token) {\r",
+              "  pm.environment.set(\"adminToken\", token);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\":\"admin\", \r\n    \"password\":\"password123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3001/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3001",
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Management Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Login succeeded\", () => {\r",
+              "  pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "const json = pm.response.json();\r",
+              "\r",
+              "// expects: { status, data: { message, data: { access_token, user } }, timestamp }\r",
+              "const token = json?.data?.access_token;\r",
+              "\r",
+              "pm.test(\"access_token is present\", () => {\r",
+              "  pm.expect(token, \"access_token\").to.be.a(\"string\").and.to.have.length.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "// Set environment variable for subsequent requests\r",
+              "if (token) {\r",
+              "  pm.environment.set(\"employeeToken\", token);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\":\"management\", \r\n    \"password\":\"password123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3001/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3001",
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Customer-Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Login succeeded\", () => {\r",
+              "  pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "const json = pm.response.json();\r",
+              "\r",
+              "// expects: { status, data: { message, data: { access_token, user } }, timestamp }\r",
+              "const token = json?.data?.access_token;\r",
+              "\r",
+              "pm.test(\"access_token is present\", () => {\r",
+              "  pm.expect(token, \"access_token\").to.be.a(\"string\").and.to.have.length.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "// Set environment variable for subsequent requests\r",
+              "if (token) {\r",
+              "  pm.environment.set(\"CustomerToken\", token);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\":\"customer1\", \r\n    \"password\":\"password123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3001/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3001",
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Seed",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWFuYWdlbWVudCIsInJvbGVzIjpbImFkbWluIiwiZW1wbG95ZWUiXSwiaWF0IjoxNzczNDAyNjMyLCJleHAiOjE3NzM0MDYyMzJ9.RJNROggWwOdzb8XeQV9rvFsg4ARuKBKMdF-U-UR0f6k",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3003/products/seed/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "products",
+            "seed",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "products-create",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{employeeToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWFuYWdlbWVudCIsInJvbGVzIjpbImFkbWluIiwiZW1wbG95ZWUiXSwiaWF0IjoxNzczNDAyNjMyLCJleHAiOjE3NzM0MDYyMzJ9.RJNROggWwOdzb8XeQV9rvFsg4ARuKBKMdF-U-UR0f6k",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \r\n  \"name\": \"New Testing\",\r\n  \"description\": \"Lightweight running shoe\",\r\n  \"brand\": \"NIKE\",\r\n  \"category\": \"SHOES\",\r\n  \"variants\": [\r\n        {\r\n            \"sku\": \"Testing\",\r\n            \"price\": 20,\r\n            \"stock\": 20\r\n        },\r\n        {\r\n            \"sku\": \"Testing1\",\r\n            \"price\": 20,\r\n            \"stock\": 20\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3003/products/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "products",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "products-update",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{employeeToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWFuYWdlbWVudCIsInJvbGVzIjpbImFkbWluIiwiZW1wbG95ZWUiXSwiaWF0IjoxNzczNDAyNjMyLCJleHAiOjE3NzM0MDYyMzJ9.RJNROggWwOdzb8XeQV9rvFsg4ARuKBKMdF-U-UR0f6k",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n            \"_id\": \"2d738195-e48f-4b51-ba5b-4f40fd230879\",\r\n            \"name\": \"New Testing\",\r\n            \"description\": \"Lightweight running shoe\",\r\n            \"brand\": \"NIKE\",\r\n            \"category\": \"SHOES\",\r\n            \"variants\": [\r\n                {\r\n                    \"sku\": \"Testing\",\r\n                    \"price\": 100,\r\n                    \"stock\": 19\r\n                },\r\n                {\r\n                    \"sku\": \"Testing1\",\r\n                    \"price\": 200,\r\n                    \"stock\": 16\r\n                }\r\n            ],\r\n            \"deleted\": false\r\n        }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3003/products/2d738195-e48f-4b51-ba5b-4f40fd230879",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "products",
+            "2d738195-e48f-4b51-ba5b-4f40fd230879"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "products",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWFuYWdlbWVudCIsInJvbGVzIjpbImFkbWluIiwiZW1wbG95ZWUiXSwiaWF0IjoxNzczNDAyNjMyLCJleHAiOjE3NzM0MDYyMzJ9.RJNROggWwOdzb8XeQV9rvFsg4ARuKBKMdF-U-UR0f6k",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3003/products?page=1&limit=5",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "products"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "5"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get A Product",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWFuYWdlbWVudCIsInJvbGVzIjpbImFkbWluIiwiZW1wbG95ZWUiXSwiaWF0IjoxNzczNDAyNjMyLCJleHAiOjE3NzM0MDYyMzJ9.RJNROggWwOdzb8XeQV9rvFsg4ARuKBKMdF-U-UR0f6k",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3003/products/613290d8-913a-4fd1-8821-c74fcb9480e7",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "products",
+            "613290d8-913a-4fd1-8821-c74fcb9480e7"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete A Product",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWFuYWdlbWVudCIsInJvbGVzIjpbImFkbWluIiwiZW1wbG95ZWUiXSwiaWF0IjoxNzczNDAyNjMyLCJleHAiOjE3NzM0MDYyMzJ9.RJNROggWwOdzb8XeQV9rvFsg4ARuKBKMdF-U-UR0f6k",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3003/products/613290d8-913a-4fd1-8821-c74fcb9480e7",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "products",
+            "613290d8-913a-4fd1-8821-c74fcb9480e7"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "order-create",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWFuYWdlbWVudCIsInJvbGVzIjpbImFkbWluIiwiZW1wbG95ZWUiXSwiaWF0IjoxNzczNDAyNjMyLCJleHAiOjE3NzM0MDYyMzJ9.RJNROggWwOdzb8XeQV9rvFsg4ARuKBKMdF-U-UR0f6k",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \r\n  \"name\": \"Testing1\",\r\n  \"description\": \"Lightweight running shoe\",\r\n  \"brand\": \"NIKE\",\r\n  \"category\": \"SHOES\",\r\n  \"variants\": [\r\n        {\r\n            \"sku\": \"Testing1-12\",\r\n            \"price\": 20,\r\n            \"stock\": 20\r\n        },\r\n        {\r\n            \"sku\": \"Testing1-21\",\r\n            \"price\": 20,\r\n            \"stock\": 20\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3002/orders/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3002",
+          "path": [
+            "orders",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "order-add-item",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoibWFuYWdlbWVudCIsInJvbGVzIjpbImFkbWluIiwiZW1wbG95ZWUiXSwiaWF0IjoxNzczNDAyNjMyLCJleHAiOjE3NzM0MDYyMzJ9.RJNROggWwOdzb8XeQV9rvFsg4ARuKBKMdF-U-UR0f6k",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \r\n  \"sku\": \"NIKE-PG-RED-8\",\r\n  \"quantity\": \"2\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3002/orders/{{orderId}}/add-item",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3002",
+          "path": [
+            "orders",
+            "{{orderId}}",
+            "add-item"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get-items",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \r\n  \"sku\": \"iPhone-12\",\r\n  \"quantity\": \"2\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3002/orders/{{orderId}}/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3002",
+          "path": [
+            "orders",
+            "{{orderId}}",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "order-complete",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \r\n  \"sku\": \"Testing1-12\",\r\n  \"qty\": \"2\"\r\n  \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3002/orders/{{orderId}}/complete",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3002",
+          "path": [
+            "orders",
+            "{{orderId}}",
+            "complete"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "My orders",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CustomerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \r\n  \"sku\": \"Testing1-12\",\r\n  \"qty\": \"2\"\r\n  \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3002/orders/me?status=PENDING&limit=2&page=1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3002",
+          "path": [
+            "orders",
+            "me"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "PENDING"
+            },
+            {
+              "key": "limit",
+              "value": "2"
+            },
+            {
+              "key": "page",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "All Customer order - Admin/ Employee",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{employeeToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \r\n  \"sku\": \"Testing1-12\",\r\n  \"qty\": \"2\"\r\n  \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3002/orders?status=PENDING&limit=2&page=2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3002",
+          "path": [
+            "orders"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "PENDING"
+            },
+            {
+              "key": "limit",
+              "value": "2"
+            },
+            {
+              "key": "page",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

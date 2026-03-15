@@ -114,7 +114,14 @@ export class ProductService {
 }
 
   async delete(id: string) {
-    return this.productModel.findByIdAndDelete(id);
+    // Soft delete: set the 'deleted' field to true
+    const product = await this.productModel.findById(id);
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+    product.deleted = true;
+    await product.save();
+    return { message: 'Product soft deleted', id };
   }
   
   async getProductsBySkus(skus: string[]) {

@@ -89,12 +89,21 @@ describe('ProductService', () => {
   });
 
   describe('delete', () => {
-    it('should call findByIdAndDelete', async () => {
-      const mockDelete = jest.fn().mockResolvedValue({ _id: 1 });
-      service['productModel'] = { findByIdAndDelete: mockDelete } as any;
+    it('should perform a soft delete', async () => {
+      const mockSave = jest.fn().mockResolvedValue();
+      const mockProduct = { deleted: false, save: mockSave };
+      const mockFindById = jest.fn().mockResolvedValue(mockProduct);
+      service['productModel'] = { findById: mockFindById } as any;
       const result = await service.delete('1');
-      expect(result).toHaveProperty('_id', 1);
-      expect(mockDelete).toHaveBeenCalledWith('1');
+      expect(mockFindById).toHaveBeenCalledWith('1');
+      expect(mockProduct.deleted).toBe(true);
+      expect(mockSave).toHaveBeenCalled();
+      expect(result).toEqual({ message: 'Product soft deleted', id: '1' });
+    });
+    it('should throw NotFoundException if product not found', async () => {
+      const mockFindById = jest.fn().mockResolvedValue(null);
+      service['productModel'] = { findById: mockFindById } as any;
+      await expect(service.delete('1')).rejects.toThrow('Product not found');
     });
   });
 

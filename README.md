@@ -94,6 +94,46 @@ A microservices-based ecommerce backend built with NestJS, supporting authentica
 
 - See `docker-compose.yml` for all environment variables (JWT secrets, DB URIs, etc).
 
+
+
+## Postman Collection
+
+- [API Collection](nest-grpc-docker.postman_collection-api)
+- [Environment File](nest-grpc-docker.postman_collection-env.json)
+
+---
+## API Endpoints
+
+Below is a summary of the main API endpoints available in this ecommerce system, as defined in the Postman collection:
+
+### Auth Service (http://localhost:3001)
+- **POST /login** — Admin Login
+	- Body: `{ "username": "admin", "password": "password123" }`
+- **POST /login** — Management Login
+	- Body: `{ "username": "management", "password": "password123" }`
+- **POST /login** — Customer Login
+	- Body: `{ "username": "customer1", "password": "password123" }`
+
+### Product Service (http://localhost:3003)
+- **POST /products/seed/** — Seed products (admin only)
+- **POST /products/** — Create product (employee & admin only)
+- **PATCH /products/:id** — Update product (employee & admin only)
+- **GET /products** — List products (All)
+	- Query: `page`, `limit`
+- **GET /products/:id** — Get a product (all)
+- **GET /products/:id** — Delete a product (employee & admin)
+
+### Order Service (http://localhost:3002)
+- **POST /orders/** — Create order (customer)
+- **POST /orders/:orderId/add-item** — Add item to order (customer)
+- **GET /orders/:orderId/** — Get order items (customer)
+- **POST /orders/:orderId/complete** — Complete order (customer)
+- **GET /orders/me** — My orders (customer)
+	- Query: `status`, `limit`, `page`
+- **GET /orders** — All customer orders (admin/employee)
+	- Query: `status`, `limit`, `page`
+
+---
 ## Project Structure
 
 - `apps/` - Microservices (auth-service, order-service, product-service)
