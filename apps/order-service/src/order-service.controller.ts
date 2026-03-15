@@ -9,7 +9,7 @@ export class OrderServiceController {
 
   @Post()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles('customer')
+  @Roles('customer', 'employee', 'admin')
   async createOrder(@Request() req: any) {
     const userId = req?.user?.sub;
     if(!userId) {
@@ -20,7 +20,7 @@ export class OrderServiceController {
 
   @Post(':orderId/add-item')
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles('customer')
+  @Roles('customer', 'employee', 'admin')
   async addItem(@Request() req: any) {
     const orderId = req.params.orderId;
     const itemData = req.body;
@@ -32,7 +32,7 @@ export class OrderServiceController {
 
   @Post(':orderId/complete')
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles('customer')
+  @Roles('customer', 'employee', 'admin')
   async completeOrder(@Request() req: any) {
     const orderId = req.params.orderId;
     return await this.orderServiceService.completeOrder(orderId);
