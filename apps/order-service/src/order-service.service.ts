@@ -119,7 +119,7 @@ export class OrderServiceService implements OnModuleInit {
     if (product.stock < itemData.quantity) {
       throw new Error(`Insufficient stock for SKU ${itemData.sku}`);
     }
-
+    itemData.productId = product.id;
     //  Calculate prices
     const unitPrice = product.price;
     const totalPrice = unitPrice * itemData.quantity;

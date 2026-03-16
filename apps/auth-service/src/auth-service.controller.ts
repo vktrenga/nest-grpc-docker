@@ -1,7 +1,6 @@
 import { Controller, Post, Body, Res } from '@nestjs/common';
 import { AppLogger } from '@app/common/logger/logger.service';
 import { AuthService } from './auth-service.service';
-import { Throttle } from '@nestjs/throttler';
 
 @Controller('/')
 export class AuthServiceController {

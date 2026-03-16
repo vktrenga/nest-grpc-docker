@@ -17,44 +17,60 @@ import { TransformInterceptor } from '@app/common/interceptors/transform.interce
 import Redis from 'ioredis/built/Redis';
 import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
 import { ThrottlerGuard } from '@nestjs/throttler/dist/throttler.guard';
+import { ConfigService } from '@nestjs/config/dist/config.service';
+import { ConfigModule } from '@nestjs/config/dist/config.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     CommonModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '1h' },
+      }),
     }),
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'PRODUCT_PACKAGE',
-        transport: Transport.GRPC,
-        options: {
-          url: 'product-service:50051',
-          package: 'product',
-          protoPath: join(
-            process.cwd(),
-            'libs/common/proto/product/product.proto',
-          ),
-        },
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.GRPC,
+          options: {
+            url: configService.get<string>('PRODUCT_GRPC_URL'),
+            package: 'product',
+            protoPath: join(
+              process.cwd(),
+              'libs/common/proto/product/product.proto',
+            ),
+          },
+        }),
       },
     ]),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'postgres', // docker service name
-      port: 5432,
-      username: 'admin',
-      password: 'admin',
-      database: 'ecommerce',
-      entities: [Order, OrderItem],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        type: 'postgres',
+        host: 'postgres',
+        port: 5432,
+        username: configService.get<string>('POSTGRES_USER'),
+        password: configService.get<string>('POSTGRES_PASSWORD'),
+        database: configService.get<string>('POSTGRES_DB'),
+        entities: [Order, OrderItem],
+        synchronize: true,
+      }),
     }),
     TypeOrmModule.forFeature([Order, OrderItem]),
     ThrottlerModule.forRoot([
-          {
-            ttl: 60000,   // 60 seconds
-            limit: 20,    // max 20 requests
-          }])
+      {
+        ttl: 60000, // 60 seconds
+        limit: 20, // max 20 requests
+      },
+    ]),
   ],
   controllers: [OrderServiceController],
   providers: [
@@ -73,16 +89,17 @@ import { ThrottlerGuard } from '@nestjs/throttler/dist/throttler.guard';
     },
     {
       provide: 'REDIS_CLIENT',
-      useFactory: () => {
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
         return new Redis({
-          host: process.env.REDIS_HOST || 'localhost',
-          port: Number(process.env.REDIS_PORT) || 6379,
+          host: configService.get<string>('REDIS_HOST'),
+          port: configService.get<number>('REDIS_PORT'),
         });
       },
     },
     {
-          provide: APP_GUARD,
-          useClass: ThrottlerGuard,
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })

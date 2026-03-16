@@ -13,28 +13,42 @@ import { ProductGrpcController } from './product.grpc.controller';
 import { TransformInterceptor } from '@app/common/interceptors/transform.interceptor';
 import { ThrottlerGuard } from '@nestjs/throttler/dist/throttler.guard';
 import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
+import { ConfigModule } from '@nestjs/config/dist/config.module';
+import { ConfigService } from '@nestjs/config/dist/config.service';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     CommonModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET, 
-      signOptions: { expiresIn: '1h' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '1h' },
+      }),
     }),
-    MongooseModule.forRoot(process.env.MONGO_URI!), 
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGO_URI'),
+      }),
+    }),
     MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }]),
     ThrottlerModule.forRoot([
-              {
-                ttl: 60000,   // 60 seconds
-                limit: 20,    // max 20 requests
-              }])
+      {
+        ttl: 60000, // 60 seconds
+        limit: 20, // max 20 requests
+      },
+    ]),
   ],
-  controllers: [ProductServiceController,ProductGrpcController],
+  controllers: [ProductServiceController, ProductGrpcController],
   providers: [
     ProductService,
     {
-         provide: APP_INTERCEPTOR,
-         useClass: TransformInterceptor,
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
     },
     {
       provide: APP_FILTER,
@@ -42,12 +56,12 @@ import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
     },
     {
       provide: AppLogger,
-      useFactory: () => new AppLogger('product-service'), 
+      useFactory: () => new AppLogger('product-service'),
     },
-     {
-              provide: APP_GUARD,
-              useClass: ThrottlerGuard,
-   },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
 })
 export class ProductServiceModule {

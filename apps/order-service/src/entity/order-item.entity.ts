@@ -7,6 +7,9 @@ export class OrderItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ type: 'varchar', nullable: true })
+  productId: string | null;
+
   @Column()
   sku: string;
 

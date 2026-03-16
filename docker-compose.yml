@@ -25,6 +25,10 @@ services:
       - PRODUCT_SERVICE_API_KEY=my-product-secret-key
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=ecommerce
+      - PRODUCT_GRPC_URL=product-service:50051
     depends_on:
       - mongodb
       - postgres
