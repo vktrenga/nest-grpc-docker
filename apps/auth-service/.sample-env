@@ -1,0 +1,2 @@
+JWT_SECRET=revest
+PORT=8080

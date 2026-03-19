@@ -1,0 +1,16 @@
+
+# Postgresql
+POSTGRES_HOST=ep-gentle-resonance-anbs7yze-pooler.c-6.us-east-1.aws.neon.tech
+POSTGRES_USER=neondb_owner
+POSTGRES_PASSWORD=npg_ev6WJnhlXQS4
+POSTGRES_DB=ecommerce
+POSTGRES_PORT=5432
+
+#redis  
+REDIS_HOST=rediss://default:gQAAAAAAASrMAAIncDFmYTAxNTZkYmEzY2Q0NTBiYThmYjI1MGEzNzI5YmRjYXAxNzY0OTI@allowed-badger-76492.upstash.io:6379
+
+#grpc
+PRODUCT_GRPC_URL=product-service:50051
+
+#JWT_SECRET
+JWT_SECRET=revest
