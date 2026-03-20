@@ -1,0 +1,12 @@
+# Ignore dependencies
+node_modules
+**/node_modules
+
+# Git
+.git
+.gitignore
+
+# OS / misc
+*.log
+*.tmp
+.DS_Store
