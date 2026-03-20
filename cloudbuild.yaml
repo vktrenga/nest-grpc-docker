@@ -1,5 +1,5 @@
 steps:
-  # Build Docker image
+  # Build
   - name: 'gcr.io/cloud-builders/docker'
     args:
       [
@@ -11,10 +11,25 @@ steps:
         '.'
       ]
 
-# Push image to Container Registry / Artifact Registry
+  # Deploy with env file
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'run',
+        'deploy',
+        'auth-service',
+        '--image',
+        'gcr.io/first-rank-coders/auth-service',
+        '--platform',
+        'managed',
+        '--allow-unauthenticated',
+        '--env-vars-file',
+        'apps/auth-service/env.yaml'
+      ]
+
 images:
   - 'gcr.io/first-rank-coders/auth-service'
 
-# Fix for your logging error
 options:
   logging: CLOUD_LOGGING_ONLY
