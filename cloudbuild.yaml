@@ -23,9 +23,11 @@ steps:
         'gcr.io/first-rank-coders/auth-service',
         '--platform',
         'managed',
-        '--region',
-        'us-central1',   # ✅ ADD THIS LINE
         '--allow-unauthenticated',
+        '--region',
+        'us-central1',
+        '--service-account',
+        'fastapi-docker-githubaction@first-rank-coders.iam.gserviceaccount.com',
         '--env-vars-file',
         'apps/auth-service/env.yaml'
       ]
