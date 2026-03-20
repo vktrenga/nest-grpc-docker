@@ -23,6 +23,8 @@ steps:
         'gcr.io/first-rank-coders/auth-service',
         '--platform',
         'managed',
+        '--region',
+        'us-central1',   # ✅ ADD THIS LINE
         '--allow-unauthenticated',
         '--env-vars-file',
         'apps/auth-service/env.yaml'
