@@ -55,13 +55,16 @@ import { ConfigModule } from '@nestjs/config/dist/config.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
-        host: 'postgres',
-        port: 5432,
+        host: configService.get<string>('POSTGRES_HOST'),
         username: configService.get<string>('POSTGRES_USER'),
         password: configService.get<string>('POSTGRES_PASSWORD'),
         database: configService.get<string>('POSTGRES_DB'),
         entities: [Order, OrderItem],
         synchronize: true,
+        ssl: {
+          rejectUnauthorized: false,
+        },
+        logging: true, // 👈 add this
       }),
     }),
     TypeOrmModule.forFeature([Order, OrderItem]),
@@ -91,10 +94,7 @@ import { ConfigModule } from '@nestjs/config/dist/config.module';
       provide: 'REDIS_CLIENT',
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        return new Redis({
-          host: configService.get<string>('REDIS_HOST'),
-          port: configService.get<number>('REDIS_PORT'),
-        });
+        return new Redis(configService.get<string>('REDIS_HOST') || 'redis://localhost:6379');
       },
     },
     {

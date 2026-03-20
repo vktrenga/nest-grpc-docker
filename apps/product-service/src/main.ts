@@ -24,11 +24,11 @@ async function bootstrap() {
   await app.startAllMicroservices();
 
   // Start HTTP
-  await app.listen(3003);
+  await app.listen(process.env.PORT || 8080, '0.0.0.0');
 
-  console.log('🚀 Product Service Running');
-  console.log('HTTP  : http://localhost:3003');
-  console.log('gRPC  : 0.0.0.0:50051');
+  console.log('Product Service Running');
+  console.log(`HTTP  : http://localhost:${process.env.PORT || 8080}`);
+  console.log(`gRPC  : ${protoPath}`);
 }
 
 bootstrap();
