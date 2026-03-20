@@ -13,9 +13,9 @@ COPY libs ./libs
 # COPY proto ./proto  # uncomment if needed
 
 # Debug: check files
-RUN ls -R /app
-RUN ls -R /app/apps/order-service
-RUN ls -R /app/libs
+# RUN ls -R /app
+# RUN ls -R /app/apps/order-service
+# RUN ls -R /app/libs
 
 # Step 3: Build the service
 RUN npx nest build "order-service"

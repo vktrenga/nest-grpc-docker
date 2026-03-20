@@ -3,36 +3,33 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Step 1: Copy root package + tsconfig
-COPY package*.json tsconfig*.json ./
-RUN npm install
+# Install deps (cached)
+COPY package*.json ./
+RUN npm ci
 
-# Step 2: Copy service + shared libs
+# Copy source
 COPY apps/auth-service ./apps/auth-service
 COPY libs ./libs
-# COPY proto ./proto  # uncomment if needed
+COPY tsconfig*.json ./
 
-# Debug: check files
-RUN ls -R /app
-RUN ls -R /app/apps/auth-service
-RUN ls -R /app/libs
+# Build
+RUN npm run build auth-service
 
-# Step 3: Build the service
-RUN npx nest build "auth-service"
 
-# Debug: check dist
-RUN ls -R /app/dist
-
+# ---------- PRODUCTION ----------
 FROM node:20-alpine
 
 WORKDIR /app
 
+# Install only production deps
 COPY package*.json ./
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
+# Copy built output only
 COPY --from=builder /app/dist ./dist
 
 ENV NODE_ENV=production
 
 EXPOSE 8080
+
 CMD ["node", "dist/apps/auth-service/src/main.js"]
