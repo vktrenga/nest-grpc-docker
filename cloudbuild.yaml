@@ -9,8 +9,12 @@ steps:
       'gcr.io/first-rank-coders/auth-service',
       '-f',
       'apps/auth-service/Dockerfile',
-      '.'
+      'apps/auth-service'   # ✅ FIXED CONTEXT
     ]
+
+  # ✅ Push Auth Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/first-rank-coders/auth-service']
 
   # =========================
   # 🚀 Deploy Auth Service
@@ -44,8 +48,12 @@ steps:
       'gcr.io/first-rank-coders/product-service',
       '-f',
       'apps/product-service/Dockerfile',
-      '.'
+      'apps/product-service'   # ✅ FIXED CONTEXT
     ]
+
+  # ✅ Push Product Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/first-rank-coders/product-service']
 
   # =========================
   # 🚀 Deploy Product Service
