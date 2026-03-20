@@ -1,39 +1,78 @@
 steps:
-  # Build
+  # =========================
+  # 🐳 Build Auth Service
+  # =========================
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      [
-        'build',
-        '-t',
-        'gcr.io/first-rank-coders/auth-service',
-        '-f',
-        'apps/auth-service/Dockerfile',
-        '.'
-      ]
+    args: [
+      'build',
+      '-t',
+      'gcr.io/first-rank-coders/auth-service',
+      '-f',
+      'apps/auth-service/Dockerfile',
+      '.'
+    ]
 
-  # Deploy with env file
+  # =========================
+  # 🚀 Deploy Auth Service
+  # =========================
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
-    args:
-      [
-        'run',
-        'deploy',
-        'auth-service',
-        '--image',
-        'gcr.io/first-rank-coders/auth-service',
-        '--platform',
-        'managed',
-        '--allow-unauthenticated',
-        '--region',
-        'us-central1',
-        '--service-account',
-        'fastapi-docker-githubaction@first-rank-coders.iam.gserviceaccount.com',
-        '--env-vars-file',
-        'apps/auth-service/env.yaml'
-      ]
+    args: [
+      'run',
+      'deploy',
+      'auth-service',
+      '--image',
+      'gcr.io/first-rank-coders/auth-service',
+      '--platform',
+      'managed',
+      '--allow-unauthenticated',
+      '--region',
+      'us-central1',
+      '--service-account',
+      'fastapi-docker-githubaction@first-rank-coders.iam.gserviceaccount.com',
+      '--env-vars-file',
+      'apps/auth-service/env.yaml'
+    ]
+
+  # =========================
+  # 🐳 Build Product Service
+  # =========================
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'gcr.io/first-rank-coders/product-service',
+      '-f',
+      'apps/product-service/Dockerfile',
+      '.'
+    ]
+
+  # =========================
+  # 🚀 Deploy Product Service
+  # =========================
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [
+      'run',
+      'deploy',
+      'product-service',
+      '--image',
+      'gcr.io/first-rank-coders/product-service',
+      '--platform',
+      'managed',
+      '--allow-unauthenticated',
+      '--region',
+      'us-central1',
+      '--service-account',
+      'fastapi-docker-githubaction@first-rank-coders.iam.gserviceaccount.com',
+      '--env-vars-file',
+      'apps/product-service/env.yaml',
+      '--use-http2'
+    ]
 
 images:
   - 'gcr.io/first-rank-coders/auth-service'
+  - 'gcr.io/first-rank-coders/product-service'
 
 options:
   logging: CLOUD_LOGGING_ONLY

@@ -16,7 +16,7 @@ async function bootstrap() {
     options: {
       package: 'product',
       protoPath: protoPath,
-      url: '0.0.0.0:50051',
+      url: `0.0.0.0:${process.env.PORT || 8080}`,
     },
   });
 
