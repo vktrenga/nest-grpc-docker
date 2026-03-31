@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { join } from 'path';
 import { ProductServiceModule } from './product-service.module';
+import * as fs from 'fs';
 
 async function bootstrap() {
 
@@ -10,7 +11,8 @@ async function bootstrap() {
 
   // const protoPath = join(process.cwd(), 'libs/common/proto/product/product.proto');
   const protoPath = join(__dirname, '../../libs/common/proto/product/product.proto');
-
+  console.log('PROTO PATH:', protoPath);
+  console.log('FILE EXISTS:', fs.existsSync(protoPath));
   // Attach gRPC microservice
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
