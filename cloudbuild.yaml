@@ -38,45 +38,45 @@ steps:
   #     'apps/auth-service/env.yaml'
   #   ]
 
-  # # =========================
-  # # 🐳 Build Product Service
-  # # =========================
-  # - name: 'gcr.io/cloud-builders/docker'
-  #   args: [
-  #     'build',
-  #     '-t',
-  #     'gcr.io/first-rank-coders/product-service',
-  #     '-f',
-  #     'apps/product-service/Dockerfile',
-  #     '.'   # ✅ FIXED CONTEXT
-  #   ]
+  # =========================
+  # 🐳 Build Product Service
+  # =========================
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'gcr.io/first-rank-coders/product-service',
+      '-f',
+      'apps/product-service/Dockerfile',
+      '.'   # ✅ FIXED CONTEXT
+    ]
 
-  # # ✅ Push Product Image
-  # - name: 'gcr.io/cloud-builders/docker'
-  #   args: ['push', 'gcr.io/first-rank-coders/product-service']
+  # ✅ Push Product Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/first-rank-coders/product-service']
 
-  # # =========================
-  # # 🚀 Deploy Product Service
-  # # =========================
-  # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  #   entrypoint: gcloud
-  #   args: [
-  #     'run',
-  #     'deploy',
-  #     'product-service',
-  #     '--image',
-  #     'gcr.io/first-rank-coders/product-service',
-  #     '--platform',
-  #     'managed',
-  #     '--allow-unauthenticated',
-  #     '--region',
-  #     'us-central1',
-  #     '--service-account',
-  #     'fastapi-docker-githubaction@first-rank-coders.iam.gserviceaccount.com',
-  #     '--env-vars-file',
-  #     'apps/product-service/env.yaml',
-  #     '--use-http2'
-  #   ]
+  # =========================
+  # 🚀 Deploy Product Service
+  # =========================
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [
+      'run',
+      'deploy',
+      'product-service',
+      '--image',
+      'gcr.io/first-rank-coders/product-service',
+      '--platform',
+      'managed',
+      '--allow-unauthenticated',
+      '--region',
+      'us-central1',
+      '--service-account',
+      'fastapi-docker-githubaction@first-rank-coders.iam.gserviceaccount.com',
+      '--env-vars-file',
+      'apps/product-service/env.yaml',
+      '--use-http2'
+    ]
   
   # =========================
   # 🐳 Build Order Service

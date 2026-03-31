@@ -42,10 +42,13 @@ import { ConfigModule } from '@nestjs/config/dist/config.module';
           options: {
             url: configService.get<string>('PRODUCT_GRPC_URL'),
             package: 'product',
-            protoPath: join(
-              process.cwd(),
-              'libs/common/proto/product/product.proto',
-            ),
+            // protoPath: join(
+            //   process.cwd(),
+            //   'libs/common/proto/product/product.proto',
+            // ),
+             protoPath :join(__dirname, '../../libs/common/proto/product/product.proto'),
+
+
           },
         }),
       },

@@ -8,7 +8,8 @@ async function bootstrap() {
   // Start HTTP server
   const app = await NestFactory.create(ProductServiceModule);
 
-  const protoPath = join(process.cwd(), 'libs/common/proto/product/product.proto');
+  // const protoPath = join(process.cwd(), 'libs/common/proto/product/product.proto');
+  const protoPath = join(__dirname, '../../libs/common/proto/product/product.proto');
 
   // Attach gRPC microservice
   app.connectMicroservice<MicroserviceOptions>({
